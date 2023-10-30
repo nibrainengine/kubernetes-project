@@ -1,0 +1,929 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2023-10-30T20:59:28Z"
+    generateName: mysql-
+    labels:
+      app: mysql
+      apps.kubernetes.io/pod-index: "0"
+      controller-revision-hash: mysql-c76bfcb4d
+      statefulset.kubernetes.io/pod-name: mysql-0
+    name: mysql-0
+    namespace: cka
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: StatefulSet
+      name: mysql
+      uid: 64fd8bb2-2f2d-4c62-8fa9-b046375a4ae6
+    resourceVersion: "5947"
+    uid: 07317f47-fcbe-4469-b17d-8a03cf1f7a5e
+  spec:
+    containers:
+    - env:
+      - name: MYSQL_ROOT_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            key: mysql_root_password
+            name: mysql-password
+      image: mysql:5.6
+      imagePullPolicy: IfNotPresent
+      name: mysql
+      resources: {}
+      securityContext:
+        runAsGroup: 65534
+        runAsUser: 65534
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/lib/mysql
+        name: pvc
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-z6glq
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    hostname: mysql-0
+    initContainers:
+    - command:
+      - sh
+      - -c
+      - chown -R 65534:65534 /var/lib/mysql
+      image: busybox:1.35
+      imagePullPolicy: IfNotPresent
+      name: initcontainer
+      resources: {}
+      securityContext:
+        runAsUser: 0
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/lib/mysql
+        name: pvc
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-z6glq
+        readOnly: true
+    nodeName: kubenode01
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: pvc
+      persistentVolumeClaim:
+        claimName: pvc-mysql
+    - name: kube-api-access-z6glq
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2023-10-30T20:59:30Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2023-10-30T20:59:31Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2023-10-30T20:59:31Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2023-10-30T20:59:28Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://9fc9f76145478f73415dca990a8cce27dd84869f15cbb6b51cc8da127653e776
+      image: docker.io/library/mysql:5.6
+      imageID: docker.io/library/mysql@sha256:20575ecebe6216036d25dab5903808211f1e9ba63dc7825ac20cb975e34cfcae
+      lastState: {}
+      name: mysql
+      ready: true
+      restartCount: 0
+      started: true
+      state:
+        running:
+          startedAt: "2023-10-30T20:59:30Z"
+    hostIP: 10.0.2.15
+    initContainerStatuses:
+    - containerID: containerd://82941984752354fad181713b5963126345f14c93ba96360fcafb4eda2899bfd3
+      image: docker.io/library/busybox:1.35
+      imageID: docker.io/library/busybox@sha256:7ae8447f3a7f5bccaa765926f25fc038e425cf1b2be6748727bbea9a13102094
+      lastState: {}
+      name: initcontainer
+      ready: true
+      restartCount: 0
+      started: false
+      state:
+        terminated:
+          containerID: containerd://82941984752354fad181713b5963126345f14c93ba96360fcafb4eda2899bfd3
+          exitCode: 0
+          finishedAt: "2023-10-30T20:59:29Z"
+          reason: Completed
+          startedAt: "2023-10-30T20:59:29Z"
+    phase: Running
+    podIP: 10.32.0.2
+    podIPs:
+    - ip: 10.32.0.2
+    qosClass: BestEffort
+    startTime: "2023-10-30T20:59:28Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2023-10-30T21:39:42Z"
+    generateName: wordpress-6776dd8459-
+    labels:
+      app: wordpress
+      pod-template-hash: 6776dd8459
+    name: wordpress-6776dd8459-7lh9w
+    namespace: cka
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: wordpress-6776dd8459
+      uid: 75939d7a-6aaa-4a97-955f-70c16c468e40
+    resourceVersion: "10308"
+    uid: 4a82649b-129d-42a6-88f1-6c3a2646e440
+  spec:
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: beta.kubernetes.io/arch
+              operator: In
+              values:
+              - amd64
+    containers:
+    - env:
+      - name: WORDPRESS_DB_HOST
+        value: mysql
+      - name: WORDPRESS_DB_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            key: mysql_root_password
+            name: mysql-password
+      image: wordpress:4.8-apache
+      imagePullPolicy: IfNotPresent
+      livenessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /readme.html
+          port: 80
+          scheme: HTTP
+        periodSeconds: 5
+        successThreshold: 1
+        timeoutSeconds: 1
+      name: wordpress
+      resources:
+        requests:
+          cpu: 10m
+          memory: 64Mi
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-gzpnv
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: kubenode01
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: kube-api-access-gzpnv
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2023-10-30T21:39:42Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2023-10-30T21:45:27Z"
+      message: 'containers with unready status: [wordpress]'
+      reason: ContainersNotReady
+      status: "False"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2023-10-30T21:45:27Z"
+      message: 'containers with unready status: [wordpress]'
+      reason: ContainersNotReady
+      status: "False"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2023-10-30T21:39:42Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://7d4be1d58d3d36c7a826e3a0e29423d22a8da6336de4d70aeab2472741b942db
+      image: docker.io/library/wordpress:4.8-apache
+      imageID: docker.io/library/wordpress@sha256:6216f64ab88fc51d311e38c7f69ca3f9aaba621492b4f1fa93ddf63093768845
+      lastState:
+        terminated:
+          containerID: containerd://7d4be1d58d3d36c7a826e3a0e29423d22a8da6336de4d70aeab2472741b942db
+          exitCode: 1
+          finishedAt: "2023-10-30T21:45:27Z"
+          reason: Error
+          startedAt: "2023-10-30T21:44:59Z"
+      name: wordpress
+      ready: false
+      restartCount: 6
+      started: false
+      state:
+        waiting:
+          message: back-off 2m40s restarting failed container=wordpress pod=wordpress-6776dd8459-7lh9w_cka(4a82649b-129d-42a6-88f1-6c3a2646e440)
+          reason: CrashLoopBackOff
+    hostIP: 10.0.2.15
+    phase: Running
+    podIP: 10.32.0.3
+    podIPs:
+    - ip: 10.32.0.3
+    qosClass: Burstable
+    startTime: "2023-10-30T21:39:42Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2023-10-30T21:39:42Z"
+    generateName: wordpress-6776dd8459-
+    labels:
+      app: wordpress
+      pod-template-hash: 6776dd8459
+    name: wordpress-6776dd8459-hl2th
+    namespace: cka
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: wordpress-6776dd8459
+      uid: 75939d7a-6aaa-4a97-955f-70c16c468e40
+    resourceVersion: "10388"
+    uid: b2f431e3-e507-4962-b668-d0e28cb57a6a
+  spec:
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: beta.kubernetes.io/arch
+              operator: In
+              values:
+              - amd64
+    containers:
+    - env:
+      - name: WORDPRESS_DB_HOST
+        value: mysql
+      - name: WORDPRESS_DB_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            key: mysql_root_password
+            name: mysql-password
+      image: wordpress:4.8-apache
+      imagePullPolicy: IfNotPresent
+      livenessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /readme.html
+          port: 80
+          scheme: HTTP
+        periodSeconds: 5
+        successThreshold: 1
+        timeoutSeconds: 1
+      name: wordpress
+      resources:
+        requests:
+          cpu: 10m
+          memory: 64Mi
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-2p9p2
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: kubenode02
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: kube-api-access-2p9p2
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2023-10-30T21:39:42Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2023-10-30T21:46:11Z"
+      message: 'containers with unready status: [wordpress]'
+      reason: ContainersNotReady
+      status: "False"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2023-10-30T21:46:11Z"
+      message: 'containers with unready status: [wordpress]'
+      reason: ContainersNotReady
+      status: "False"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2023-10-30T21:39:42Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://364d65536010a441f3b03100e64d5c683d7d2460042c12b309a1d5786d50611f
+      image: docker.io/library/wordpress:4.8-apache
+      imageID: docker.io/library/wordpress@sha256:6216f64ab88fc51d311e38c7f69ca3f9aaba621492b4f1fa93ddf63093768845
+      lastState:
+        terminated:
+          containerID: containerd://364d65536010a441f3b03100e64d5c683d7d2460042c12b309a1d5786d50611f
+          exitCode: 1
+          finishedAt: "2023-10-30T21:46:09Z"
+          reason: Error
+          startedAt: "2023-10-30T21:45:36Z"
+      name: wordpress
+      ready: false
+      restartCount: 6
+      started: false
+      state:
+        waiting:
+          message: back-off 2m40s restarting failed container=wordpress pod=wordpress-6776dd8459-hl2th_cka(b2f431e3-e507-4962-b668-d0e28cb57a6a)
+          reason: CrashLoopBackOff
+    hostIP: 10.0.2.15
+    phase: Running
+    podIP: 10.32.0.3
+    podIPs:
+    - ip: 10.32.0.3
+    qosClass: Burstable
+    startTime: "2023-10-30T21:39:42Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2023-10-30T21:39:42Z"
+    generateName: wordpress-6776dd8459-
+    labels:
+      app: wordpress
+      pod-template-hash: 6776dd8459
+    name: wordpress-6776dd8459-mrf92
+    namespace: cka
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: wordpress-6776dd8459
+      uid: 75939d7a-6aaa-4a97-955f-70c16c468e40
+    resourceVersion: "10395"
+    uid: b80956cc-edef-4f46-bf63-5045962ca20e
+  spec:
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: beta.kubernetes.io/arch
+              operator: In
+              values:
+              - amd64
+    containers:
+    - env:
+      - name: WORDPRESS_DB_HOST
+        value: mysql
+      - name: WORDPRESS_DB_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            key: mysql_root_password
+            name: mysql-password
+      image: wordpress:4.8-apache
+      imagePullPolicy: IfNotPresent
+      livenessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /readme.html
+          port: 80
+          scheme: HTTP
+        periodSeconds: 5
+        successThreshold: 1
+        timeoutSeconds: 1
+      name: wordpress
+      resources:
+        requests:
+          cpu: 10m
+          memory: 64Mi
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-bksgt
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: kubenode02
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: kube-api-access-bksgt
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2023-10-30T21:39:42Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2023-10-30T21:46:13Z"
+      message: 'containers with unready status: [wordpress]'
+      reason: ContainersNotReady
+      status: "False"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2023-10-30T21:46:13Z"
+      message: 'containers with unready status: [wordpress]'
+      reason: ContainersNotReady
+      status: "False"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2023-10-30T21:39:42Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: containerd://faf79918def3eace27b1ee8bf13f6ca471463ea9fb35cfdc2f7b0bac296bf537
+      image: docker.io/library/wordpress:4.8-apache
+      imageID: docker.io/library/wordpress@sha256:6216f64ab88fc51d311e38c7f69ca3f9aaba621492b4f1fa93ddf63093768845
+      lastState:
+        terminated:
+          containerID: containerd://faf79918def3eace27b1ee8bf13f6ca471463ea9fb35cfdc2f7b0bac296bf537
+          exitCode: 137
+          finishedAt: "2023-10-30T21:46:12Z"
+          reason: Error
+          startedAt: "2023-10-30T21:45:27Z"
+      name: wordpress
+      ready: false
+      restartCount: 6
+      started: false
+      state:
+        waiting:
+          message: back-off 2m40s restarting failed container=wordpress pod=wordpress-6776dd8459-mrf92_cka(b80956cc-edef-4f46-bf63-5045962ca20e)
+          reason: CrashLoopBackOff
+    hostIP: 10.0.2.15
+    phase: Running
+    podIP: 10.32.0.2
+    podIPs:
+    - ip: 10.32.0.2
+    qosClass: Burstable
+    startTime: "2023-10-30T21:39:42Z"
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"mysql","namespace":"cka"},"spec":{"ports":[{"port":3306,"protocol":"TCP","targetPort":3306}],"selector":{"app":"mysql"}}}
+    creationTimestamp: "2023-10-30T21:09:42Z"
+    name: mysql
+    namespace: cka
+    resourceVersion: "6869"
+    uid: efe25f6a-1c94-4f9f-9135-e92a5c2371a7
+  spec:
+    clusterIP: 10.99.236.6
+    clusterIPs:
+    - 10.99.236.6
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - port: 3306
+      protocol: TCP
+      targetPort: 3306
+    selector:
+      app: mysql
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"creationTimestamp":null,"labels":{"app":"wordpress"},"name":"wordpress","namespace":"cka"},"spec":{"ports":[{"nodePort":31234,"port":80,"protocol":"TCP","targetPort":80}],"selector":{"app":"wordpress"},"type":"NodePort"},"status":{"loadBalancer":{}}}
+    creationTimestamp: "2023-10-30T21:43:17Z"
+    labels:
+      app: wordpress
+    name: wordpress
+    namespace: cka
+    resourceVersion: "10085"
+    uid: f0b3d12c-ba91-47b8-97ef-b9fbd331c5c2
+  spec:
+    clusterIP: 10.110.29.100
+    clusterIPs:
+    - 10.110.29.100
+    externalTrafficPolicy: Cluster
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - nodePort: 31234
+      port: 80
+      protocol: TCP
+      targetPort: 80
+    selector:
+      app: wordpress
+    sessionAffinity: None
+    type: NodePort
+  status:
+    loadBalancer: {}
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{"deployment.kubernetes.io/revision":"1"},"creationTimestamp":"2023-10-30T21:32:05Z","generation":1,"labels":{"app":"wordpress"},"name":"wordpress","namespace":"cka","resourceVersion":"8901","uid":"342dc9a0-0453-4495-87f0-e4966e73ff17"},"spec":{"progressDeadlineSeconds":600,"replicas":3,"revisionHistoryLimit":10,"selector":{"matchLabels":{"app":"wordpress"}},"strategy":{"rollingUpdate":{"maxSurge":"25%","maxUnavailable":"25%"},"type":"RollingUpdate"},"template":{"metadata":{"creationTimestamp":null,"labels":{"app":"wordpress"}},"spec":{"affinity":{"nodeAffinity":{"requiredDuringSchedulingIgnoredDuringExecution":{"nodeSelectorTerms":[{"matchExpressions":[{"key":"beta.kubernetes.io/arch","operator":"In","values":["amd64"]}]}]}}},"containers":[{"env":[{"name":"WORDPRESS_DB_HOST","value":"mysql"},{"name":"WORDPRESS_DB_PASSWORD","valueFrom":{"secretKeyRef":{"key":"mysql_root_password","name":"mysql-password"}}}],"image":"wordpress:4.8-apache","imagePullPolicy":"IfNotPresent","livenessProbe":{"failureThreshold":3,"httpGet":{"path":"/readme.html","port":80,"scheme":"HTTP"},"periodSeconds":5,"successThreshold":1,"timeoutSeconds":1},"name":"wordpress","resources":{"requests":{"cpu":"10m","memory":"64Mi"}},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File"}],"dnsPolicy":"ClusterFirst","restartPolicy":"Always","schedulerName":"default-scheduler","securityContext":{},"terminationGracePeriodSeconds":30}}},"status":{"conditions":[{"lastTransitionTime":"2023-10-30T21:32:05Z","lastUpdateTime":"2023-10-30T21:32:05Z","message":"Deployment does not have minimum availability.","reason":"MinimumReplicasUnavailable","status":"False","type":"Available"},{"lastTransitionTime":"2023-10-30T21:32:05Z","lastUpdateTime":"2023-10-30T21:32:05Z","message":"ReplicaSet \"wordpress-5b497d95fc\" is progressing.","reason":"ReplicaSetUpdated","status":"True","type":"Progressing"}],"observedGeneration":1,"replicas":3,"unavailableReplicas":3,"updatedReplicas":3}}
+    creationTimestamp: "2023-10-30T21:39:42Z"
+    generation: 1
+    labels:
+      app: wordpress
+    name: wordpress
+    namespace: cka
+    resourceVersion: "10399"
+    uid: fb285048-6f01-4c45-a586-2772ed45a533
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 3
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: wordpress
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: wordpress
+      spec:
+        affinity:
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+              - matchExpressions:
+                - key: beta.kubernetes.io/arch
+                  operator: In
+                  values:
+                  - amd64
+        containers:
+        - env:
+          - name: WORDPRESS_DB_HOST
+            value: mysql
+          - name: WORDPRESS_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: mysql_root_password
+                name: mysql-password
+          image: wordpress:4.8-apache
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /readme.html
+              port: 80
+              scheme: HTTP
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: wordpress
+          resources:
+            requests:
+              cpu: 10m
+              memory: 64Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    conditions:
+    - lastTransitionTime: "2023-10-30T21:39:42Z"
+      lastUpdateTime: "2023-10-30T21:39:45Z"
+      message: ReplicaSet "wordpress-6776dd8459" has successfully progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2023-10-30T21:43:29Z"
+      lastUpdateTime: "2023-10-30T21:43:29Z"
+      message: Deployment does not have minimum availability.
+      reason: MinimumReplicasUnavailable
+      status: "False"
+      type: Available
+    observedGeneration: 1
+    replicas: 3
+    unavailableReplicas: 3
+    updatedReplicas: 3
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "3"
+      deployment.kubernetes.io/max-replicas: "4"
+      deployment.kubernetes.io/revision: "1"
+    creationTimestamp: "2023-10-30T21:39:42Z"
+    generation: 1
+    labels:
+      app: wordpress
+      pod-template-hash: 6776dd8459
+    name: wordpress-6776dd8459
+    namespace: cka
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: wordpress
+      uid: fb285048-6f01-4c45-a586-2772ed45a533
+    resourceVersion: "10397"
+    uid: 75939d7a-6aaa-4a97-955f-70c16c468e40
+  spec:
+    replicas: 3
+    selector:
+      matchLabels:
+        app: wordpress
+        pod-template-hash: 6776dd8459
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: wordpress
+          pod-template-hash: 6776dd8459
+      spec:
+        affinity:
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+              - matchExpressions:
+                - key: beta.kubernetes.io/arch
+                  operator: In
+                  values:
+                  - amd64
+        containers:
+        - env:
+          - name: WORDPRESS_DB_HOST
+            value: mysql
+          - name: WORDPRESS_DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: mysql_root_password
+                name: mysql-password
+          image: wordpress:4.8-apache
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /readme.html
+              port: 80
+              scheme: HTTP
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: wordpress
+          resources:
+            requests:
+              cpu: 10m
+              memory: 64Mi
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    fullyLabeledReplicas: 3
+    observedGeneration: 1
+    replicas: 3
+- apiVersion: apps/v1
+  kind: StatefulSet
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"apps/v1","kind":"StatefulSet","metadata":{"annotations":{},"creationTimestamp":"2023-10-30T20:47:47Z","generation":1,"labels":{"app":"mysql"},"name":"mysql","namespace":"cka","resourceVersion":"5016","uid":"af42b58c-4387-46f4-adaa-1a9de925b68c"},"spec":{"persistentVolumeClaimRetentionPolicy":{"whenDeleted":"Retain","whenScaled":"Retain"},"podManagementPolicy":"OrderedReady","replicas":1,"revisionHistoryLimit":10,"selector":{"matchLabels":{"app":"mysql"}},"serviceName":"","template":{"metadata":{"creationTimestamp":null,"labels":{"app":"mysql"}},"spec":{"containers":[{"env":[{"name":"MYSQL_ROOT_PASSWORD","valueFrom":{"secretKeyRef":{"key":"mysql_root_password","name":"mysql-password"}}}],"image":"mysql:5.6","imagePullPolicy":"IfNotPresent","name":"mysql","resources":{},"securityContext":{"runAsGroup":65534,"runAsUser":65534},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File","volumeMounts":[{"mountPath":"/var/lib/mysql","name":"pvc"}]}],"dnsPolicy":"ClusterFirst","initContainers":[{"command":["sh","-c","chown -R 65534:65534 /var/lib/mysql"],"image":"busybox:1.35","imagePullPolicy":"IfNotPresent","name":"initcontainer","resources":{},"securityContext":{"runAsUser":0},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File","volumeMounts":[{"mountPath":"/var/lib/mysql","name":"pvc"}]}],"restartPolicy":"Always","schedulerName":"default-scheduler","securityContext":{},"terminationGracePeriodSeconds":30,"volumes":[{"name":"pvc","persistentVolumeClaim":{"claimName":"pvc-mysql"}}]}},"updateStrategy":{"rollingUpdate":{"partition":0},"type":"RollingUpdate"}},"status":{"availableReplicas":0,"collisionCount":0,"currentReplicas":1,"currentRevision":"mysql-564dd99869","observedGeneration":1,"replicas":1,"updateRevision":"mysql-564dd99869","updatedReplicas":1}}
+    creationTimestamp: "2023-10-30T20:59:28Z"
+    generation: 1
+    labels:
+      app: mysql
+    name: mysql
+    namespace: cka
+    resourceVersion: "5948"
+    uid: 64fd8bb2-2f2d-4c62-8fa9-b046375a4ae6
+  spec:
+    persistentVolumeClaimRetentionPolicy:
+      whenDeleted: Retain
+      whenScaled: Retain
+    podManagementPolicy: OrderedReady
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: mysql
+    serviceName: ""
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: mysql
+      spec:
+        containers:
+        - env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: mysql_root_password
+                name: mysql-password
+          image: mysql:5.6
+          imagePullPolicy: IfNotPresent
+          name: mysql
+          resources: {}
+          securityContext:
+            runAsGroup: 65534
+            runAsUser: 65534
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /var/lib/mysql
+            name: pvc
+        dnsPolicy: ClusterFirst
+        initContainers:
+        - command:
+          - sh
+          - -c
+          - chown -R 65534:65534 /var/lib/mysql
+          image: busybox:1.35
+          imagePullPolicy: IfNotPresent
+          name: initcontainer
+          resources: {}
+          securityContext:
+            runAsUser: 0
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /var/lib/mysql
+            name: pvc
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - name: pvc
+          persistentVolumeClaim:
+            claimName: pvc-mysql
+    updateStrategy:
+      rollingUpdate:
+        partition: 0
+      type: RollingUpdate
+  status:
+    availableReplicas: 1
+    collisionCount: 0
+    currentReplicas: 1
+    currentRevision: mysql-c76bfcb4d
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+    updateRevision: mysql-c76bfcb4d
+    updatedReplicas: 1
+kind: List
+metadata:
+  resourceVersion: ""
